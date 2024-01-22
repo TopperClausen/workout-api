@@ -1,13 +1,23 @@
 import { Module } from '@nestjs/common';
-import SqlConfigService from './services/sqlConfig.service';
-import { appendTypeOrmModule } from './database.module';
-import { JWTService } from './services/jwt.service';
-import { FirstSetupService } from './services/firstSetup.service';
 import controllers from './controllers';
 import services from './services';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
-const imports = [];
-appendTypeOrmModule(imports);
+require('dotenv').config();
+
+const imports = [
+  TypeOrmModule.forRoot({
+    type: 'mysql',
+    host: process.env.DBHOST,
+    port: 25060,
+    username: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    database: process.env.DB,
+    entities: [User],
+    synchronize: true
+})
+];
 
 @Module({
   imports,

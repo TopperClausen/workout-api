@@ -6,7 +6,7 @@ export default class CMSController {
     jwtService = new JWTService();
 
     async currentUser(request: Request): Promise<User> {
-        return await this.jwtService.getUserFromJwt(request.headers.authorization, { relations: ['roles'] });
+        return await this.jwtService.getUserFromJwt(request.headers.authorization);
     }
     
     defaultOk(message: string = 'ok', data = null) {

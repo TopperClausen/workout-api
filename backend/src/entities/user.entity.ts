@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { EncryptionService } from 'src/services/encryption.service';
-import { Role } from './role.entity';
 import { CMSBaseEntity } from './base.entity';
 
 @Entity()
@@ -41,8 +40,4 @@ export class User extends CMSBaseEntity {
 
     @Column({ default: true })
     isActive: boolean;
-
-    @ManyToMany(() => Role)
-    @JoinTable({ name: 'user_role' })
-    roles: Role[];
 }
