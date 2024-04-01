@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord # :nodoc:
-  has_many :weight
+  has_many :weights
+  has_many :calories
 
   has_secure_password
 
