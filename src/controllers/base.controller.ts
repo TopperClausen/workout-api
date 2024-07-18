@@ -6,8 +6,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export default class BaseController {
   jwtService = new JWTService();
 
-  async currentUser(request: Request): Promise<User> {
-    return await this.jwtService.getUserFromJwt(request.headers.authorization);
+  async currentUser(request: Request, overload?: any): Promise<User> {
+    return await this.jwtService.getUserFromJwt(request.headers.authorization, overload);
   }
 
   defaultOk(message: string = 'ok', data = null) {
@@ -19,16 +19,10 @@ export default class BaseController {
   }
 
   defaultError(message: string = 'error', data = null) {
-    throw new HttpException(
-      { message: message, data },
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+    throw new HttpException({ message: message, data }, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   failedFields(failedFields: string[] = [], message: string = 'failed') {
-    throw new HttpException(
-      { message, failedFields },
-      HttpStatus.UNPROCESSABLE_ENTITY,
-    );
+    throw new HttpException({ message, failedFields }, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 }

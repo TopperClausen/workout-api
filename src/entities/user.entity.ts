@@ -3,10 +3,10 @@ import { BaseEntity } from './base.entity';
 import { EncryptionService } from 'src/services/encryption.service';
 import { Weight } from './weight.entity';
 
+const encryptionService = new EncryptionService();
+
 @Entity()
 export class User extends BaseEntity {
-  private encryptionService = new EncryptionService();
-
   constructor(params: Partial<User> = null) {
     super();
 
@@ -38,7 +38,7 @@ export class User extends BaseEntity {
   weights: Weight[];
 
   public set password(value: string) {
-    this.passwordDigest = this.encryptionService.encrypt(value);
+    this.passwordDigest = encryptionService.encrypt(value);
   }
 
   public get password() {

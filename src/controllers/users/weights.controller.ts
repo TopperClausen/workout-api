@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import BaseController from '../base.controller';
 import { Request } from 'express';
 import { Weight } from 'src/entities/weight.entity';
@@ -22,7 +13,8 @@ export class WeightsController extends BaseController {
 
   @Get('/weights')
   async get(@Param('userId') userId: number, @Req() req: Request) {
-    const user = await this.currentUser(req);
+    const user = await this.currentUser(req, { relations: ['weights'] });
+    console.log(user);
     return this.defaultOk('success', user.weights);
   }
 
@@ -36,11 +28,7 @@ export class WeightsController extends BaseController {
   }
 
   @Patch('/weights/:weightId')
-  async update(
-    @Param('userId') userId: number,
-    @Param('weightId') weightId: number,
-    @Req() req: Request,
-  ) {
+  async update(@Param('userId') userId: number, @Param('weightId') weightId: number, @Req() req: Request) {
     const user = await this.currentUser(req);
     const weight = await Weight.findOneBy({ id: weightId, user: user });
     weight.grantParams(req.body);
@@ -49,22 +37,14 @@ export class WeightsController extends BaseController {
   }
 
   @Get('/weights/:weightId')
-  async show(
-    @Param('userId') userId: number,
-    @Param('weightId') weightId: number,
-    @Req() req: Request,
-  ) {
+  async show(@Param('userId') userId: number, @Param('weightId') weightId: number, @Req() req: Request) {
     const user = await this.currentUser(req);
     const weight = await Weight.findOneBy({ id: weightId, user: user });
     return this.defaultOk('success', weight);
   }
 
   @Delete('/weights/:weightId')
-  async destroy(
-    @Param('userId') userId: number,
-    @Param('weightId') weightId: number,
-    @Req() req: Request,
-  ) {
+  async destroy(@Param('userId') userId: number, @Param('weightId') weightId: number, @Req() req: Request) {
     const user = await this.currentUser(req);
     const weight = await Weight.findOneBy({ id: weightId, user: user });
     await weight.remove();
