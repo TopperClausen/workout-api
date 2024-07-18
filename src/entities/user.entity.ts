@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { EncryptionService } from 'src/services/encryption.service';
+import { Weight } from './weight.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,6 +30,12 @@ export class User extends BaseEntity {
 
   @Column({ default: false })
   shouldChangePassword: boolean;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @OneToMany(() => Weight, (weight) => weight.user)
+  weights: Weight[];
 
   public set password(value: string) {
     this.passwordDigest = this.encryptionService.encrypt(value);
