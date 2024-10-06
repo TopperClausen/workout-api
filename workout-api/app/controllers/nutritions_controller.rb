@@ -16,7 +16,7 @@ class NutritionsController < ApplicationController
   def nutrition_response_to_response(response)
     {
       name: response["product"]["product_name"],
-      kcal_per: kcal_from_nutriments(response["product"]["nutriments"])
+      nutrition_per: kcal_from_nutriments(response["product"]["nutriments"])
     }
   end
 
