@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email]);
     return unauthorized_response if user.nil?
 
-    return unauthorized_response unless (user.authenticate(params[:password]))
+    return unauthorized_response unless user.authenticate(params[:password]).present?
 
     render json: { message: 'success', data: { jwt: JwtService.encode(user.to_json) } }
   end

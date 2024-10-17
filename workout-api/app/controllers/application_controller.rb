@@ -1,4 +1,18 @@
 class ApplicationController < ActionController::API
+
+  rescue_from ActiveRecord::RecordNotFound, with: -> { not_found_response }
+  rescue_from ActiveRecord::RecordInvalid, with: ->(e) { bad_request_response(errors: e.record.errors) }
+  rescue_from ActionController::ParameterMissing, with: ->(e) { bad_request_response(message: e.message) }
+  rescue_from ActionController::UnpermittedParameters, with: ->(e) { bad_request_response(message: e.message) }
+  rescue_from PG::UniqueViolation, with: ->(error) { render json: { message: "unique violation", raised: error }, status: :conflict}
+  rescue_from ActiveRecord::RecordNotFound, with: ->(error) { render json: { message: "record not found", raised: error }, status: :not_found }
+  rescue_from ActiveRecord::RecordInvalid, with: ->(error) { render json: { message: "record invalid", raised: error }, status: :unprocessable_entity }
+  rescue_from JWT::DecodeError, with: -> { unauthorized_response }
+  rescue_from JWT::VerificationError, with: -> { unauthorized_response }
+  rescue_from JWT::ExpiredSignature, with: -> { unauthorized_response }
+
+  private
+
   def authorize
     jwt = request.headers[:Authorization];
     if jwt.blank?

@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_01_175452) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_17_161045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "consumptions", force: :cascade do |t|
+    t.string "barcode"
+    t.string "product_name"
+    t.integer "grams"
+    t.integer "calories"
+    t.integer "fat"
+    t.integer "carbs"
+    t.integer "protein"
+    t.integer "sugar"
+    t.integer "salt"
+    t.integer "saturated_fat"
+    t.integer "sodium"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_consumptions_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email"
@@ -23,5 +41,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_01_175452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "weights", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.decimal "weight", null: false
+    t.decimal "muscle_mass_percentage", null: false
+    t.decimal "fat_mass_percentage", null: false
+    t.decimal "water_percentage", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end
